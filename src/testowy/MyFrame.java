@@ -31,13 +31,12 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     public MyPanel panel;
     public JLabel label1;
     private double initial_distance;
-    public LinesContainer linesToDraw;
     Configurator c;
     Block block1, block2;
     ArrayList<Block> blocks = new ArrayList();
     public boolean flag = false;
     public MyFrame(Configurator c) {
-            super("Hello World");
+            super("GRAKOM Simulator");
             this.c = c;
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLayout(null);            
@@ -48,9 +47,6 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             
             blocks.add(new Block(c.b1));            
             blocks.add(new Block(c.b2));
-//            block1 = new Block(c.b1, linesToDraw);
-//            block2 = new Block(c.b2, linesToDraw);
-            
             
             this.initial_distance = c.initial_distance;
             
@@ -58,23 +54,23 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             pack();           
             
             jb = new JButton("Wyjście");
-            jb2 = new JButton("Przycisk");    
+//            jb2 = new JButton("Przycisk");    
             
             jb.setBounds(c.buttonX, nthButton(1), c.buttonWidth, c.buttonHeight);
-            jb2.setBounds(c.buttonX, nthButton(2), c.buttonWidth, c.buttonHeight);
+//            jb2.setBounds(c.buttonX, nthButton(2), c.buttonWidth, c.buttonHeight);
             
             jb.addActionListener(this);
-            jb2.addActionListener(this);
+//            jb2.addActionListener(this);
             
             addKeyListener(this);
             
             
             label1 = new JLabel("Distance: 1000px");
-            label1.setBounds(c.buttonX, nthButton(3), c.buttonWidth, c.buttonHeight);
+            label1.setBounds(c.buttonX, nthButton(2), c.buttonWidth, c.buttonHeight);
 
             add(label1);
             add(jb);
-            add(jb2);
+//            add(jb2);
             
             performZoom(0);
             
@@ -108,14 +104,17 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             performTranslationX(-50.0);
         }  
         if(c == 'z' || c == 'Z'){
-            performTranslationY(-50.0);
+            performTranslationY(50.0);
         }
         if(c == 'Q' || c == 'q'){
-            performTranslationY(50.0);
+            performTranslationY(-50.0);
         }         
         if(c == 't' || c == 'T'){
-            performRotation();
+            performRotation(true);
         }   
+        if(c == 'Y' || c == 'y'){
+            performRotation(false);
+        }
     } 
     @Override
     public void keyTyped(KeyEvent evt) {
@@ -239,19 +238,20 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         panel.repaint();
     }
     
-    public void performRotation(){
+    public void performRotation(boolean flag){
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
         System.out.println("II!");
         for(int it = 0; it < c.buildings; it++){           
-            ArrayList<Line> lines = blocks.get(it).lines();          
-            blocks.get(it).a = multiplyMatrices(blocks.get(it).a);
-            blocks.get(it).bb= multiplyMatrices(blocks.get(it).bb);
-            blocks.get(it).c = multiplyMatrices(blocks.get(it).c);
-            blocks.get(it).d = multiplyMatrices(blocks.get(it).d);
-            blocks.get(it).e = multiplyMatrices(blocks.get(it).e);
-            blocks.get(it).f = multiplyMatrices(blocks.get(it).f);
-            blocks.get(it).g = multiplyMatrices(blocks.get(it).g);
-            blocks.get(it).h = multiplyMatrices(blocks.get(it).h);
+                    
+            blocks.get(it).a = multiplyMatrices(blocks.get(it).a, flag);
+            blocks.get(it).bb= multiplyMatrices(blocks.get(it).bb, flag);
+            blocks.get(it).c = multiplyMatrices(blocks.get(it).c, flag);
+            blocks.get(it).d = multiplyMatrices(blocks.get(it).d, flag);
+            blocks.get(it).e = multiplyMatrices(blocks.get(it).e, flag);
+            blocks.get(it).f = multiplyMatrices(blocks.get(it).f, flag);
+            blocks.get(it).g = multiplyMatrices(blocks.get(it).g, flag);
+            blocks.get(it).h = multiplyMatrices(blocks.get(it).h, flag);
+            ArrayList<Line> lines = blocks.get(it).lines();  
             for(int i = 0; i < 12;i++){
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
@@ -263,11 +263,16 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         panel.repaint();
     }
     
-    public Point3D multiplyMatrices(Point3D point){
+    public Point3D multiplyMatrices(Point3D point, boolean flag){
         double a, b, cc;
-        a = point.x * c.angleMatrix[0][0] + c.angleMatrix[0][1] * point.y + c.angleMatrix[0][2] * point.z;
-        b = point.x * c.angleMatrix[1][0] + c.angleMatrix[1][1] * point.y + c.angleMatrix[1][2] * point.z;
-        cc= point.x * c.angleMatrix[2][0] + c.angleMatrix[2][1] * point.y + c.angleMatrix[2][2] * point.z;
+        double angleMatrix[][] = new double[4][4];
+        if(flag == true)
+            angleMatrix = c.angleMatrixforward;
+        else
+            angleMatrix = c.angleMatrixreverse;
+        a = point.x * angleMatrix[0][0] + angleMatrix[0][1] * point.y + angleMatrix[0][2] * point.z;
+        b = point.x * angleMatrix[1][0] + angleMatrix[1][1] * point.y + angleMatrix[1][2] * point.z;
+        cc= point.x * angleMatrix[2][0] + angleMatrix[2][1] * point.y + angleMatrix[2][2] * point.z;
         return new Point3D(a, b, cc);
     }
     public DrawLine execute_projection(double x1, double y1, double x2, double y2, double z1, double z2, Color color)
@@ -287,10 +292,6 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     
     public int nthButton(int n){
         return c.buttonMarginTop + (n - 1) * c.buttonHeight + c.distanceBetweenButtons * (n - 1);
-    }
-    
-    public void setLines(Line lc){
-        this.linesToDraw.sceneLines.add(lc);
     }
 }
 

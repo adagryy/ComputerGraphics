@@ -31,8 +31,8 @@ public class Configurator {
     public int height = (int) screenSize.getHeight();
     
     //Setting application window properties
-    public int windowWidth = (int)(0.6 * width);
-    public int windowHeight = (int) (0.7 * height);        
+    public int windowWidth = (int)(0.7 * width);
+    public int windowHeight = (int) (0.8 * height);        
     public int windowStartX = 10;
     public int windowStartY = 20;
     
@@ -64,27 +64,33 @@ public class Configurator {
         {300, 150, 100},
         {300, 250, 100},
         {50, 250, 100},            
-        {50, 150, 500},
+        {50, 150, 700},
         {300, 150, 500},
         {300, 250, 500},
         {50, 250, 500} 
     };
     
     public double b2[][] = {
-        {200, 300, 100},
-        {300, 400, 100},
-        {200, 500,100},
-        {100, 400, 100},            
-        {200, 300, 600},
-        {300, 400, 600},
-        {200, 500, 600},
-        {100, 400, 600}, 
+        {-100, 100, 100},
+        {0,    200, 100},
+        {-100, 300, 100},
+        {-200, 200, 100},            
+        {-100, 100, 600},
+        {0,    200, 600},
+        {-100, 300, 600},
+        {-200, 200, 600}, 
     };
     
-    public double angleMatrix[][] = {
+    public double angleMatrixforward[][] = {
         {Math.cos(Math.toRadians(angle)), 0, Math.sin(Math.toRadians(angle)), 0},
         {0, 1, 0, 0},
         {-1 * Math.sin(Math.toRadians(angle)), 0, Math.cos(Math.toRadians(angle)), 0},
+        {0, 0, 0, 1}
+    };
+        public double angleMatrixreverse[][] = {
+        {Math.cos(Math.toRadians(-1 * angle)), 0, Math.sin(Math.toRadians(-1 * angle)), 0},
+        {0, 1, 0, 0},
+        {-1 * Math.sin(Math.toRadians(-1 * angle)), 0, Math.cos(Math.toRadians(-1 * angle)), 0},
         {0, 0, 0, 1}
     };
 }
