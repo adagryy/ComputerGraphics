@@ -30,8 +30,11 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     public JButton jb, jb2;
     public MyPanel panel;
     public JLabel label1;
+    private double initial_distance;
+    public LinesContainer linesToDraw;
     Configurator c;
-    Block block1;
+    Block block1, block2;
+    ArrayList<Block> blocks = new ArrayList();
     public boolean flag = false;
     public MyFrame(Configurator c) {
             super("Hello World");
@@ -43,7 +46,13 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             panel = new MyPanel(c, c.panelStartX, c.panelStartY);  
             setFocusable(true);
             
-            block1 = new Block(c.b1);            
+            blocks.add(new Block(c.b1));            
+            blocks.add(new Block(c.b2));
+//            block1 = new Block(c.b1, linesToDraw);
+//            block2 = new Block(c.b2, linesToDraw);
+            
+            
+            this.initial_distance = c.initial_distance;
             
             add(panel);
             pack();           
@@ -66,6 +75,8 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             add(label1);
             add(jb);
             add(jb2);
+            
+            performZoom(0);
             
             setVisible(true);
     }
@@ -102,6 +113,9 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         if(c == 'Q' || c == 'q'){
             performTranslationY(50.0);
         }         
+        if(c == 't' || c == 'T'){
+            performRotation();
+        }   
     } 
     @Override
     public void keyTyped(KeyEvent evt) {
@@ -115,94 +129,146 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     
     public void performZoom(int zoom_factor){
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
-        ArrayList<Line> lines = block1.lines();
         
-        if(block1.distance <= 10 * abs(zoom_factor) && zoom_factor < 0)
+        if(this.initial_distance <= 10 * abs(zoom_factor) && zoom_factor < 0)
             return;
-        block1.distance += zoom_factor;
+        this.initial_distance += zoom_factor;
+        
+        for(int it = 0; it < c.buildings; it++){
+            ArrayList<Line> lines = new ArrayList();
+            lines = blocks.get(it).lines();
+    //        System.out.println()
+            label1.setText("Distance: " + Integer.toString((int)this.initial_distance ) + "px");
+            for(int i = 0; i < 12;i++){//12 - amount of edges in cuboid
+                Point3D p1 = lines.get(i).getP1();
+                Point3D p2 = lines.get(i).getP2();
+                Color color = lines.get(i).getColor();
 
-        label1.setText("Distance: " + Integer.toString((int)block1.distance) + "px");
-        for(int i = 0; i < 12;i++){
-            Point3D p1 = lines.get(i).getP1();
-            Point3D p2 = lines.get(i).getP2();
-            Color color = lines.get(i).getColor();
-
-            drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+                drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            }
         }
         panel.setDll(drawLineList);
         panel.repaint();
     }
     
     public void performTranslationZ(double translation_factor){
-        block1.a.z += translation_factor;
-        block1.bb.z+= translation_factor;
-        block1.c.z += translation_factor;
-        block1.d.z += translation_factor;
-        block1.e.z += translation_factor;
-        block1.f.z += translation_factor;
-        block1.g.z += translation_factor;
-        block1.h.z += translation_factor;
-        System.out.println("Ok!");
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
-        ArrayList<Line> lines = block1.lines();
-        
-        for(int i = 0; i < 12;i++){
-            Point3D p1 = lines.get(i).getP1();
-            Point3D p2 = lines.get(i).getP2();
-            Color color = lines.get(i).getColor();
+        for(int it = 0; it < c.buildings; it++){
+            blocks.get(it).a.z += translation_factor;
+            blocks.get(it).bb.z+= translation_factor;
+            blocks.get(it).c.z += translation_factor;
+            blocks.get(it).d.z += translation_factor;
+            blocks.get(it).e.z += translation_factor;
+            blocks.get(it).f.z += translation_factor;
+            blocks.get(it).g.z += translation_factor;
+            blocks.get(it).h.z += translation_factor;
+            System.out.print(blocks.get(it).a.z);
+            System.out.print(blocks.get(it).bb.z);
+            System.out.print(blocks.get(it).c.z);
+            System.out.print(blocks.get(it).d.z);
+            System.out.print(blocks.get(it).e.z);
+            System.out.print(blocks.get(it).f.z);
+            System.out.print(blocks.get(it).g.z);
+            System.out.print(blocks.get(it).h.z);
+            System.out.println();
+            ArrayList<Line> lines = blocks.get(it).lines();
 
-            drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            for(int i = 0; i < 12;i++){
+                Point3D p1 = lines.get(i).getP1();
+                Point3D p2 = lines.get(i).getP2();
+                Color color = lines.get(i).getColor();
+
+                drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            }
         }
         panel.setDll(drawLineList);
         panel.repaint();
     }
     
     public void performTranslationX(double translation_factor){
-        block1.a.x += translation_factor;
-        block1.bb.x+= translation_factor;
-        block1.c.x += translation_factor;
-        block1.d.x += translation_factor;
-        block1.e.x += translation_factor;
-        block1.f.x += translation_factor;
-        block1.g.x += translation_factor;
-        block1.h.x += translation_factor;
-        System.out.println("Ok!");
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
-        ArrayList<Line> lines = block1.lines();
-        
-        for(int i = 0; i < 12;i++){
-            Point3D p1 = lines.get(i).getP1();
-            Point3D p2 = lines.get(i).getP2();
-            Color color = lines.get(i).getColor();
+        for(int it = 0; it < c.buildings; it++){
+            blocks.get(it).a.x += translation_factor;
+            blocks.get(it).bb.x+= translation_factor;
+            blocks.get(it).c.x += translation_factor;
+            blocks.get(it).d.x += translation_factor;
+            blocks.get(it).e.x += translation_factor;
+            blocks.get(it).f.x += translation_factor;
+            blocks.get(it).g.x += translation_factor;
+            blocks.get(it).h.x += translation_factor;
+            System.out.println("Ok!");
 
-            drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            ArrayList<Line> lines = blocks.get(it).lines();
+
+            for(int i = 0; i < 12;i++){
+                Point3D p1 = lines.get(i).getP1();
+                Point3D p2 = lines.get(i).getP2();
+                Color color = lines.get(i).getColor();
+
+                drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            }
         }
         panel.setDll(drawLineList);
         panel.repaint();
     }
     
     public void performTranslationY(double translation_factor){
-        block1.a.y += translation_factor;
-        block1.bb.y+= translation_factor;
-        block1.c.y += translation_factor;
-        block1.d.y += translation_factor;
-        block1.e.y += translation_factor;
-        block1.f.y += translation_factor;
-        block1.g.y += translation_factor;
-        block1.h.y += translation_factor;
-        System.out.println("Ok!");
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
-        ArrayList<Line> lines = block1.lines();
-        
-        for(int i = 0; i < 12;i++){
-            Point3D p1 = lines.get(i).getP1();
-            Point3D p2 = lines.get(i).getP2();
-            Color color = lines.get(i).getColor();
+        for(int it = 0; it < c.buildings; it++){
+            blocks.get(it).a.y += translation_factor;
+            blocks.get(it).bb.y+= translation_factor;
+            blocks.get(it).c.y += translation_factor;
+            blocks.get(it).d.y += translation_factor;
+            blocks.get(it).e.y += translation_factor;
+            blocks.get(it).f.y += translation_factor;
+            blocks.get(it).g.y += translation_factor;
+            blocks.get(it).h.y += translation_factor;
+            System.out.println("Ok!");
 
-            drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            ArrayList<Line> lines = blocks.get(it).lines();
+
+            for(int i = 0; i < 12;i++){
+                Point3D p1 = lines.get(i).getP1();
+                Point3D p2 = lines.get(i).getP2();
+                Color color = lines.get(i).getColor();
+
+                drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            }
         }
         panel.setDll(drawLineList);
         panel.repaint();
+    }
+    
+    public void performRotation(){
+        ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
+        System.out.println("II!");
+        for(int it = 0; it < c.buildings; it++){           
+            ArrayList<Line> lines = blocks.get(it).lines();          
+            blocks.get(it).a = multiplyMatrices(blocks.get(it).a);
+            blocks.get(it).bb= multiplyMatrices(blocks.get(it).bb);
+            blocks.get(it).c = multiplyMatrices(blocks.get(it).c);
+            blocks.get(it).d = multiplyMatrices(blocks.get(it).d);
+            blocks.get(it).e = multiplyMatrices(blocks.get(it).e);
+            blocks.get(it).f = multiplyMatrices(blocks.get(it).f);
+            blocks.get(it).g = multiplyMatrices(blocks.get(it).g);
+            blocks.get(it).h = multiplyMatrices(blocks.get(it).h);
+            for(int i = 0; i < 12;i++){
+                Point3D p1 = lines.get(i).getP1();
+                Point3D p2 = lines.get(i).getP2();
+                Color color = lines.get(i).getColor();
+                drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
+            }
+        }
+        panel.setDll(drawLineList);
+        panel.repaint();
+    }
+    
+    public Point3D multiplyMatrices(Point3D point){
+        double a, b, cc;
+        a = point.x * c.angleMatrix[0][0] + c.angleMatrix[0][1] * point.y + c.angleMatrix[0][2] * point.z;
+        b = point.x * c.angleMatrix[1][0] + c.angleMatrix[1][1] * point.y + c.angleMatrix[1][2] * point.z;
+        cc= point.x * c.angleMatrix[2][0] + c.angleMatrix[2][1] * point.y + c.angleMatrix[2][2] * point.z;
+        return new Point3D(a, b, cc);
     }
     public DrawLine execute_projection(double x1, double y1, double x2, double y2, double z1, double z2, Color color)
     {
@@ -210,18 +276,21 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             y2_int = (int) y2, y1_int = (int) y1, 
             z1_int = (int) z1, z2_int = (int) z2;
         DrawLine dl = new DrawLine();      
-        dl.x1 = (x1_int * block1.distance) / (z1_int + block1.distance);
-        dl.y1 = (y1_int * block1.distance) / (z1_int + block1.distance);
-        dl.x2 = (x2_int * block1.distance) / (z2_int + block1.distance);
-        dl.y2 = (y2_int * block1.distance) / (z2_int + block1.distance);
+        dl.x1 = (x1_int * this.initial_distance ) / (z1_int + this.initial_distance );
+        dl.y1 = (y1_int * this.initial_distance ) / (z1_int + this.initial_distance );
+        dl.x2 = (x2_int * this.initial_distance ) / (z2_int + this.initial_distance );
+        dl.y2 = (y2_int * this.initial_distance ) / (z2_int + this.initial_distance );
         dl.c = color;
         
         return dl;
     }
     
-    
     public int nthButton(int n){
         return c.buttonMarginTop + (n - 1) * c.buttonHeight + c.distanceBetweenButtons * (n - 1);
+    }
+    
+    public void setLines(Line lc){
+        this.linesToDraw.sceneLines.add(lc);
     }
 }
 

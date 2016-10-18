@@ -23,10 +23,10 @@ public class Point3D {
         return "("+x+","+y+","+z+")";
     }
     
-    public void add(Point3D point){
-        this.x += point.x;
-        this.y += point.y;
-        this.z += point.z;
+    public void setPoint(Point3D point){
+        this.x = point.x;
+        this.y = point.y;
+        this.z = point.z;
     }
     
     public void substract(Point3D point){

@@ -23,7 +23,6 @@ public class MyPanel extends JPanel{
                 setLayout(null);
                 setBackground(c.panelColor);
                 setBounds(c.panelStartX, c.panelStartY, c.panelWidth, c.panelHeight);
-                
                 this.x = x;
                 this.y = y;
                 this.c = c;
@@ -33,26 +32,15 @@ public class MyPanel extends JPanel{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-                g2d.translate(0, c.panelHeight);
-                g2d.scale(1, -1);
+                g2d.translate((int) c.panelWidth / 2, (int) 0.75 * c.panelHeight);
                 if(dll != null)
                 {
-                    for(int i = 0; i < 12;i++){
+                    for(int i = 0; i < c.buildings * 12;i++){
                         g2d.setColor(dll.get(i).c);
-//                        g2d.drawLine(c.windowWidth / 2 - (int) dll.get(i).x1, c.windowHeight / 2  - (int)  dll.get(i).y1,
-//                                c.windowWidth / 2 - (int)  dll.get(i).x2, c.windowHeight / 2 - (int)  dll.get(i).y2);
-                        
                         g2d.drawLine((int) dll.get(i).x1, (int)  dll.get(i).y1,
                                      (int)  dll.get(i).x2, (int)  dll.get(i).y2);
-//                        System.out.print(dll.get(i).x2 + " ");
-//                        System.out.print(dll.get(i).y1 + " ");
-//                        System.out.print(dll.get(i).x2 + " ");
-//                        System.out.print(dll.get(i).y2 + " ");
-//                        System.out.println();
-//                          System.out.println((int) dll.get(i).x1 + " | " + (int) dll.get(i).y1 + " | " + (int) dll.get(i).x2 + " | " + (int) dll.get(i).y2 + " | " );
                     }
                 }
-                g2d.drawLine(0,0,100,100);
 	}
         
         public void setX(int x){
