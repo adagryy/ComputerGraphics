@@ -32,7 +32,6 @@ public class MyPanel extends JPanel{
 
 	@Override
 	protected void paintComponent(Graphics g) {
-//                dll = null;
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
                 g2d.translate(c.panelWidth / 2, c.panelHeight / 2);

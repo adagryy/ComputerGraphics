@@ -185,10 +185,9 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         Collections.sort(polygons);
         System.out.println("ppppppppppppppppppppppp");
         for( int i = 0; i < 6 * c.buildings; i++){
-            System.out.print(polygons.get(i).covers + ", ");
+            System.out.print(polygons.get(i).covers + "[" + (int) polygons.get(i).distance + "], ");
 //            System.out.println();
         }
-//        System.out.println("ppppppppppppppppppppppp");
         panel.setPols(executePolygon_projection(polygons));
         panel.repaint();
     }
@@ -272,23 +271,25 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             C = ref1.x * ref2.y - ref1.y * ref2.x;
             
             D = -1 * (A * p1.x + B * p1.y + C * p1.z);
-            for(int x = 0; x < myPolygon.size(); x++){
-                
+            for(int x = 0; x < myPolygon.size(); x++){                
                 if(x != i){
                     MyPolygon checked = myPolygon.get(x);
                     for(int j = 0; j < 4; j++){
                         //liczę odległość punktów od płaszczyzny
                         double point_distance = (A * checked.getPoint(j).x + B * checked.getPoint(j).y + C * checked.getPoint(j).z + D ) / (Math.sqrt(A * A + B * B + C * C));
                         double observer_distance = ( D ) / (Math.sqrt(A * A + B * B + C * C));//obserwator w pkt (0,0,0)
+//                        if(point_distance * observer_distance < 0)
+//                            break;
                         if(point_distance * observer_distance > 0){ 
-                            checked.covers++;//punkty po tej samej stronie
+                            temp.covers++;//punkty po tej samej stronie
                             break;
                         }
                     }
                 }
             }
+            temp.distance = temp.massCenter();
             mp.add(temp);
-        }        
+        }     
         return mp;
     }
     
