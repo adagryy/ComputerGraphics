@@ -12,6 +12,8 @@ package structures;
 public class Point3D {
     public double x, y, z;
     
+    public Point3D(){}
+    
     public Point3D(double x, double y, double z){
         this.x = x;
         this.y = y;
@@ -29,9 +31,11 @@ public class Point3D {
         this.z = point.z;
     }
     
-    public void substract(Point3D point){
-        this.x -= point.x;
-        this.y -= point.y;
-        this.z -= point.z;    
+    public Point3D substract(Point3D point){
+        Point3D p = new Point3D();
+        p.x = this.x - point.x;
+        p.y = this.y - point.y;
+        p.z = this.z - point.z;  
+        return p;
     }
 }

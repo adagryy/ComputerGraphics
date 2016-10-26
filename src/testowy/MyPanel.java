@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 public class MyPanel extends JPanel{
         public int x,y;
         Configurator c;
+        public ArrayList<PolygonsContainer> pc = null;
+        
         public ArrayList<DrawLine> dll = null; //ArrayList of lines (line is a set of four numbers - coordinates)
         
     	public MyPanel(Configurator c, int x, int y) {
@@ -30,20 +32,35 @@ public class MyPanel extends JPanel{
 
 	@Override
 	protected void paintComponent(Graphics g) {
+//                dll = null;
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
                 g2d.translate(c.panelWidth / 2, c.panelHeight / 2);
 //                g2d.translate(0, c.panelHeight );
                 //g2d.scale(1, -1);
                 //g2d.translate((int) c.panelWidth / 2, (int) 0.75 * c.panelHeight);
-                if(dll != null)
-                {
-                    for(int i = 0; i < c.buildings * 12;i++){
-                        g2d.setColor(dll.get(i).c);
-                        g2d.drawLine((int) dll.get(i).x1, (int)  dll.get(i).y1,
-                                     (int)  dll.get(i).x2, (int)  dll.get(i).y2);
+//                if(dll != null)
+//                {
+//                    for(int i = 0; i < c.buildings * 12;i++){
+//                        g2d.setColor(dll.get(i).c);
+//                        g2d.drawLine((int) dll.get(i).x1, (int)  dll.get(i).y1,
+//                                     (int)  dll.get(i).x2, (int)  dll.get(i).y2);
+//                    }
+//                }
+                if(pc != null){
+                    
+                    for(int i = 0; i < c.buildings * 6; i++){   
+                        g.setColor(Color.red);
+                        g.fillPolygon(pc.get(i).xpts, pc.get(i).ypts, 4);
+                        g.setColor(Color.blue);
+                        g.drawPolygon(pc.get(i).xpts, pc.get(i).ypts, 4);
                     }
                 }
+//                int xpoints[] = {25, 500, 500, 25};
+//                int ypoints[] = {25, 25, 250, 250};
+//                int npoints = 4;
+//
+//                g.drawPolygon(xpoints, ypoints, npoints);
 	}
         
         public void setX(int x){
@@ -66,5 +83,9 @@ public class MyPanel extends JPanel{
         
         public void setDll(ArrayList<DrawLine> arr){
             this.dll = arr;
+        }
+        
+        public void setPols(ArrayList<PolygonsContainer> pc){
+            this.pc = pc;
         }
 }

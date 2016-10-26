@@ -63,23 +63,6 @@ public class Block {
         lines.add(new Line(c,g, color));
         lines.add(new Line(d,h, color));
         
-//        color = Color.red;//base of a cuboid
-//        myFrame.setLines(new Line(a,bb, Color.yellow));
-//        myFrame.setLines(new Line(bb,c, color));
-//        myFrame.setLines(new Line(c,d, color));
-//        myFrame.setLines(new Line(d,a, Color.blue));
-//        
-//        color = Color.black;//top of the cuboid
-//        myFrame.setLines(new Line(e,f, color));
-//        myFrame.setLines(new Line(f,g, color));
-//        myFrame.setLines(new Line(g,h, color));
-//        myFrame.setLines(new Line(h,e, color));
-//        
-//        color = Color.green;//edges of the cuboid
-//        myFrame.setLines(new Line(a,e, color));
-//        myFrame.setLines(new Line(bb,f, color));
-//        myFrame.setLines(new Line(c,g, color));
-//        myFrame.setLines(new Line(d,h, color));
         return lines;
     }
 }
