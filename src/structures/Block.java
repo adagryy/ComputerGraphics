@@ -45,7 +45,7 @@ public class Block {
 //        {500, 500, 600},
 //        {100, 500, 600}
         
-        Color color = Color.red;//base of a cuboid
+        Color color = Color.black;//base of a cuboid
         lines.add(new Line(a,bb, color));
         lines.add(new Line(bb,c, color));
         lines.add(new Line(c,d, color));
@@ -57,7 +57,7 @@ public class Block {
         lines.add(new Line(g,h, color));
         lines.add(new Line(h,e, color));
         
-        color = Color.green;//edges of the cuboid
+        color = Color.black;//edges of the cuboid
         lines.add(new Line(a,e, color));
         lines.add(new Line(bb,f, color));
         lines.add(new Line(c,g, color));

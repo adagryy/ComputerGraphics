@@ -129,20 +129,22 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     public void performZoom(int zoom_factor){
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
         
-        if(this.initial_distance <= 10 * abs(zoom_factor) && zoom_factor < 0)
+        if(c.initial_distance <= 10 * abs(zoom_factor) && zoom_factor < 0)
             return;
-        this.initial_distance += zoom_factor;
+        
+        c.initial_distance += zoom_factor;
         
         for(int it = 0; it < c.buildings; it++){
             ArrayList<Line> lines = new ArrayList();
             lines = blocks.get(it).lines();
     //        System.out.println()
-            label1.setText("Distance: " + Integer.toString((int)this.initial_distance ) + "px");
+//            System.out.println("+++++++++++++++++++++++++++++++++");
+            label1.setText("Distance: " + Integer.toString((int)c.initial_distance ) + "px");
             for(int i = 0; i < 12;i++){//12 - amount of edges in cuboid
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
                 Color color = lines.get(i).getColor();
-
+                wypisz(blocks.get(it));
                 drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
             }
         }
@@ -161,24 +163,27 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).f.z += translation_factor;
             blocks.get(it).g.z += translation_factor;
             blocks.get(it).h.z += translation_factor;
-            System.out.print(blocks.get(it).a.z);
-            System.out.print(blocks.get(it).bb.z);
-            System.out.print(blocks.get(it).c.z);
-            System.out.print(blocks.get(it).d.z);
-            System.out.print(blocks.get(it).e.z);
-            System.out.print(blocks.get(it).f.z);
-            System.out.print(blocks.get(it).g.z);
-            System.out.print(blocks.get(it).h.z);
-            System.out.println();
+//            System.out.print(blocks.get(it).a.z);
+//            System.out.print(blocks.get(it).bb.z);
+//            System.out.print(blocks.get(it).c.z);
+//            System.out.print(blocks.get(it).d.z);
+//            System.out.print(blocks.get(it).e.z);
+//            System.out.print(blocks.get(it).f.z);
+//            System.out.print(blocks.get(it).g.z);
+//            System.out.print(blocks.get(it).h.z);
+//            System.out.println();
             ArrayList<Line> lines = blocks.get(it).lines();
-
+            
             for(int i = 0; i < 12;i++){
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
                 Color color = lines.get(i).getColor();
-
+                
+                wypisz(blocks.get(it));
+                
                 drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
             }
+            
         }
         panel.setDll(drawLineList);
         panel.repaint();
@@ -203,6 +208,8 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
                 Color color = lines.get(i).getColor();
+                
+                wypisz(blocks.get(it));
 
                 drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
             }
@@ -222,7 +229,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).f.y += translation_factor;
             blocks.get(it).g.y += translation_factor;
             blocks.get(it).h.y += translation_factor;
-            System.out.println("Ok!");
+//            System.out.println("Ok!");
 
             ArrayList<Line> lines = blocks.get(it).lines();
 
@@ -230,7 +237,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
                 Color color = lines.get(i).getColor();
-
+                wypisz(blocks.get(it));
                 drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
             }
         }
@@ -240,9 +247,8 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
     
     public void performRotation(boolean flag){
         ArrayList<DrawLine> drawLineList = new ArrayList(); //lines to be drawn on JPanel
-        System.out.println("II!");
+//        System.out.println("II!");
         for(int it = 0; it < c.buildings; it++){           
-                    
             blocks.get(it).a = multiplyMatrices(blocks.get(it).a, flag);
             blocks.get(it).bb= multiplyMatrices(blocks.get(it).bb, flag);
             blocks.get(it).c = multiplyMatrices(blocks.get(it).c, flag);
@@ -256,6 +262,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
                 Point3D p1 = lines.get(i).getP1();
                 Point3D p2 = lines.get(i).getP2();
                 Color color = lines.get(i).getColor();
+                wypisz(blocks.get(it));
                 drawLineList.add(execute_projection(p1.x, p1.y, p2.x, p2.y, p1.z, p2.z, color));                
             }
         }
@@ -281,17 +288,32 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             y2_int = (int) y2, y1_int = (int) y1, 
             z1_int = (int) z1, z2_int = (int) z2;
         DrawLine dl = new DrawLine();      
-        dl.x1 = (x1_int * this.initial_distance ) / (z1_int + this.initial_distance );
-        dl.y1 = (y1_int * this.initial_distance ) / (z1_int + this.initial_distance );
-        dl.x2 = (x2_int * this.initial_distance ) / (z2_int + this.initial_distance );
-        dl.y2 = (y2_int * this.initial_distance ) / (z2_int + this.initial_distance );
+        dl.x1 = (x1_int * c.initial_distance ) / ( z1_int );
+        dl.y1 = (y1_int * c.initial_distance ) / ( z1_int );
+        dl.x2 = (x2_int * c.initial_distance ) / ( z2_int );
+        dl.y2 = (y2_int * c.initial_distance ) / ( z2_int );
+
         dl.c = color;
         
         return dl;
     }
+   
     
     public int nthButton(int n){
         return c.buttonMarginTop + (n - 1) * c.buttonHeight + c.distanceBetweenButtons * (n - 1);
+    }
+    
+    public void wypisz(Block block){
+//        System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTT");
+//           System.out.println(block.a.x + ", " + block.a.y + ", " + block.a.z);
+//           System.out.println(block.bb.x + ", " + block.bb.y + ", " + block.bb.z);
+//           System.out.println(block.c.x + ", " + block.c.y + ", " + block.c.z);
+//           System.out.println(block.d.x + ", " + block.d.y + ", " + block.d.z);
+//           System.out.println(block.e.x + ", " + block.e.y + ", " + block.e.z);
+//           System.out.println(block.f.x + ", " + block.f.y + ", " + block.f.z);
+//           System.out.println(block.g.x + ", " + block.g.y + ", " + block.g.z);
+//           System.out.println(block.h.x + ", " + block.h.y + ", " + block.h.z);
+//           System.out.println("======================");
     }
 }
 

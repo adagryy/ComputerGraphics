@@ -20,10 +20,10 @@ public class Configurator {
     public final int buildings = 2;
     
     //Sets initial distance of the scene from projection surface
-    public double initial_distance = 3000;
+    public double initial_distance = 1500;
     
     //Rotation angle step
-    public double angle = 10;
+    public double angle = 7.5;
     
     //We are getting screen dimensions here
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -51,43 +51,82 @@ public class Configurator {
     public int buttonMarginTop = 10;
     public int distanceBetweenButtons = 25;
     
+//    public double b1[][] = {
+//
+//        {50, 150, 100},
+//        {300, 150, 100},
+//        {300, 250, 100},
+//        {50, 250, 100},            
+//        {50, 150, 500},
+//        {300, 150, 500},
+//        {300, 250, 500},
+//        {50, 250, 500} 
+//    };
+//    
+//    public double b2[][] = {
+//        {-100, 100, 100},
+//        {0,    200, 100},
+//        {-100, 300, 100},
+//        {-200, 200, 100},            
+//        {-100, 100, 600},
+//        {0,    200, 600},
+//        {-100, 300, 600},
+//        {-200, 200, 600}, 
+//    };
+    
     public double b1[][] = {
-//        {100, 300, 100},
-//        {500, 300, 100},
-//        {500, 500, 100},
-//        {100, 500, 100},            
-//        {100, 300, 600},
-//        {500, 300, 600},
-//        {500, 500, 600},
-//        {100, 500, 600}
-        {50, 150, 100},
-        {300, 150, 100},
-        {300, 250, 100},
-        {50, 250, 100},            
-        {50, 150, 700},
-        {300, 150, 500},
-        {300, 250, 500},
-        {50, 250, 500} 
+
+        {100.0, -250.0, 1500.0},
+        {100.0, 0.0, 1500.0},
+        {200.0, 0.0, 1500.0},
+        {200.0, -250.0, 1500.0},            
+        {100.0, -250.0, 1900.0},
+        {100.0, 0.0, 1900.0},
+        {200.0, 0.0, 1900.0},
+        {200.0, -250.0, 1900.0} 
     };
     
     public double b2[][] = {
-        {-100, 100, 100},
-        {0,    200, 100},
-        {-100, 300, 100},
-        {-200, 200, 100},            
-        {-100, 100, 600},
-        {0,    200, 600},
-        {-100, 300, 600},
-        {-200, 200, 600}, 
+        {300, 100, 1600},
+        {500, -100, 1600},
+        {600, 0, 1600},
+        {400, 200, 1600},            
+        {300, 100, 2000},
+        {500, -100, 2000},
+        {600, 0, 2000},
+        {400, 200, 2000}, 
     };
     
+    
+
+
+
+
+
+
+
+    
+//    public double angleMatrixforward[][] = {
+//        {1,0,0,0},
+//        {0, Math.cos(Math.toRadians(angle)), -1 * Math.sin(Math.toRadians(angle)), 0},
+//        {0, Math.sin(Math.toRadians(angle)),  Math.cos(Math.toRadians(angle)), 0},
+//        {0, 0, 0, 1}
+//    };
+//        public double angleMatrixreverse[][] = {
+//        {1,0,0,0},
+//        {0, Math.cos(Math.toRadians(-1 * angle)), -1 * Math.sin(Math.toRadians(-1 * angle)), 0},
+//        {0, Math.sin(Math.toRadians(-1 * angle)),  Math.cos(Math.toRadians(-1 * angle)), 0},
+//        {0, 0, 0, 1}
+//    };
+        
+        
     public double angleMatrixforward[][] = {
         {Math.cos(Math.toRadians(angle)), 0, Math.sin(Math.toRadians(angle)), 0},
         {0, 1, 0, 0},
         {-1 * Math.sin(Math.toRadians(angle)), 0, Math.cos(Math.toRadians(angle)), 0},
         {0, 0, 0, 1}
-    };
-        public double angleMatrixreverse[][] = {
+    };        
+    public double angleMatrixreverse[][] = {
         {Math.cos(Math.toRadians(-1 * angle)), 0, Math.sin(Math.toRadians(-1 * angle)), 0},
         {0, 1, 0, 0},
         {-1 * Math.sin(Math.toRadians(-1 * angle)), 0, Math.cos(Math.toRadians(-1 * angle)), 0},

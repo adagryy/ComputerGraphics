@@ -32,7 +32,10 @@ public class MyPanel extends JPanel{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-                g2d.translate((int) c.panelWidth / 2, (int) 0.75 * c.panelHeight);
+                g2d.translate(c.panelWidth / 2, c.panelHeight / 2);
+//                g2d.translate(0, c.panelHeight );
+                //g2d.scale(1, -1);
+                //g2d.translate((int) c.panelWidth / 2, (int) 0.75 * c.panelHeight);
                 if(dll != null)
                 {
                     for(int i = 0; i < c.buildings * 12;i++){
