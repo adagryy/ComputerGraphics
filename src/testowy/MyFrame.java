@@ -42,8 +42,8 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             panel = new MyPanel(c, c.panelStartX, c.panelStartY);  
             setFocusable(true);
             
-            blocks.add(new Block(c.b1));            
-            blocks.add(new Block(c.b2));
+            blocks.add(new Block(c.b1, Color.red));            
+            blocks.add(new Block(c.b2, Color.green));
             
             this.initial_distance = c.initial_distance;
             
@@ -132,7 +132,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         
         for(int it = 0; it < c.buildings; it++){
             label1.setText("Distance: " + Integer.toString((int)c.initial_distance ) + "px");
-            polygons = setPols(polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
+            polygons = setPols(blocks.get(it).color, polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
                     blocks.get(it).f, blocks.get(it).g, blocks.get(it).h, c);
         }
         process(polygons);
@@ -154,7 +154,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).f.z += translation_factor;
             blocks.get(it).g.z += translation_factor;
             blocks.get(it).h.z += translation_factor;
-            polygons = setPols(polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
+            polygons = setPols(blocks.get(it).color, polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
                     blocks.get(it).f, blocks.get(it).g, blocks.get(it).h, c);
         }
         process(polygons);
@@ -176,7 +176,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).g.x += translation_factor;
             blocks.get(it).h.x += translation_factor;
             
-            polygons = setPols(polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
+            polygons = setPols(blocks.get(it).color, polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
                     blocks.get(it).f, blocks.get(it).g, blocks.get(it).h, c);
         }
         
@@ -204,7 +204,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).g.y += translation_factor;
             blocks.get(it).h.y += translation_factor;
 
-            polygons = setPols(polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
+            polygons = setPols(blocks.get(it).color, polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
                     blocks.get(it).f, blocks.get(it).g, blocks.get(it).h, c);
         }
         process(polygons);
@@ -228,7 +228,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             blocks.get(it).g = multiplyMatrices(blocks.get(it).g, flag);
             blocks.get(it).h = multiplyMatrices(blocks.get(it).h, flag);
             
-            polygons = setPols(polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
+            polygons = setPols( blocks.get(it).color, polygons, blocks.get(it).a, blocks.get(it).bb, blocks.get(it).c, blocks.get(it).d, blocks.get(it).e,
                     blocks.get(it).f, blocks.get(it).g, blocks.get(it).h, c);
         }
         process(polygons);
@@ -260,31 +260,43 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         ArrayList<MyPolygon> mp = new ArrayList<MyPolygon>();
         
         for(int i = 0; i < myPolygon.size(); i++){
-            MyPolygon temp = myPolygon.get(i);
+            MyPolygon temp = myPolygon.get(i);//biorę wielokąt z listy
             double A,B,C,D;
-            Point3D p1 = temp.p1;
+            Point3D p1 = temp.p1;//obieram na tym wielokącie 3 punkty (najłatwiej wziąć jego wierzchołki)
             Point3D ref1 = temp.p2.substract(p1);
             Point3D ref2 = temp.p3.substract(p1);
             
-            A = ref1.y * ref2.z - ref1.z * ref2.y; // wyznaczam współczynniki równania ogólnego płaszczyzny
+            A = ref1.y * ref2.z - ref1.z * ref2.y; // wyznaczam współczynniki równania ogólnego płaszczyzny przechodzącej przez te punkty
             B = ref1.z * ref2.x - ref1.x * ref2.z;
             C = ref1.x * ref2.y - ref1.y * ref2.x;
             
             D = -1 * (A * p1.x + B * p1.y + C * p1.z);
-            for(int x = 0; x < myPolygon.size(); x++){                
+            for(int x = 0 ; x < myPolygon.size(); x++){                
                 if(x != i){
                     MyPolygon checked = myPolygon.get(x);
-                    for(int j = 0; j < 4; j++){
                         //liczę odległość punktów od płaszczyzny
-                        double point_distance = (A * checked.getPoint(j).x + B * checked.getPoint(j).y + C * checked.getPoint(j).z + D ) / (Math.sqrt(A * A + B * B + C * C));
+                        double point_distance1 = (A * checked.p1.x + B * checked.p1.y + C * checked.p1.z + D ) / (Math.sqrt(A * A + B * B + C * C));
+                        double point_distance2 = (A * checked.p2.x + B * checked.p2.y + C * checked.p2.z + D ) / (Math.sqrt(A * A + B * B + C * C));
+                        double point_distance3 = (A * checked.p3.x + B * checked.p3.y + C * checked.p3.z + D ) / (Math.sqrt(A * A + B * B + C * C));
+                        double point_distance4 = (A * checked.p4.x + B * checked.p4.y + C * checked.p4.z + D ) / (Math.sqrt(A * A + B * B + C * C));
                         double observer_distance = ( D ) / (Math.sqrt(A * A + B * B + C * C));//obserwator w pkt (0,0,0)
-//                        if(point_distance * observer_distance < 0)
-//                            break;
-                        if(point_distance * observer_distance > 0){ 
-                            temp.covers++;//punkty po tej samej stronie
-                            break;
+                        
+                        double point_distance;
+                        
+                        if(checkValues(point_distance1, point_distance2, point_distance3, point_distance4)){//jeśli cały wielokąt leży po tej samej stronie płaszczyzny, to...
+                            if(point_distance1 * observer_distance > 0){ 
+                                temp.covers++;//punkty po tej samej stronie
+                                break;
+                            }
+                        }else{
+                            Point3D pp2 = new Point3D(((checked.p1.x + checked.p3.x) / 2), ((checked.p1.y + checked.p3.y) / 2), ((checked.p1.z + checked.p3.z) / 2));
+
+                            point_distance = (A * pp2.x + B * pp2.y + C * pp2.z + D ) / (Math.sqrt(A * A + B * B + C * C));
+                            if(point_distance * observer_distance > 0){ 
+                                temp.covers++;//punkty po tej samej stronie
+                                break;
+                            }
                         }
-                    }
                 }
             }
             temp.distance = temp.massCenter();
@@ -293,7 +305,7 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
         return mp;
     }
     
-    public ArrayList<PolygonsContainer> executePolygon_projection(ArrayList<MyPolygon> mp){
+    public ArrayList<PolygonsContainer> executePolygon_projection(ArrayList<MyPolygon> mp){//robi rzutowanie punktu 3D na płaszczyznę 2D
         ArrayList<PolygonsContainer> pc = new ArrayList();
         
         for(int i = 0; i < mp.size(); i++){
@@ -310,25 +322,27 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
             polContainer.xpts[3] = (int) ((mp.get(i).p4.x * c.initial_distance ) / ( mp.get(i).p4.z ));
             polContainer.ypts[3] = (int) ((mp.get(i).p4.y * c.initial_distance ) / ( mp.get(i).p4.z ));  
             
+            polContainer.color = mp.get(i).color;
+            
             pc.add(polContainer);
         }
         
         return pc;
     }
     
-    public ArrayList<MyPolygon> setPols(ArrayList<MyPolygon> polygons, Point3D a, Point3D bb, Point3D c, Point3D d, Point3D e, Point3D f, Point3D g, Point3D h, Configurator config){
-        polygons.add(new MyPolygon(a, bb, c, d, config));
-        polygons.add(new MyPolygon(a, bb, f, e, config));
-        polygons.add(new MyPolygon(bb, c, g, f, config));
-        polygons.add(new MyPolygon(c, d, h, g, config));
-        polygons.add(new MyPolygon(a, d, h, e, config));
-        polygons.add(new MyPolygon(e, f, g, h, config));
+    public ArrayList<MyPolygon> setPols(Color color, ArrayList<MyPolygon> polygons, Point3D a, Point3D bb, Point3D c, Point3D d, Point3D e, Point3D f, Point3D g, Point3D h, Configurator config){
+        polygons.add(new MyPolygon(a, bb, c, d, config, color));
+        polygons.add(new MyPolygon(a, bb, f, e, config, color));
+        polygons.add(new MyPolygon(bb, c, g, f, config, color));
+        polygons.add(new MyPolygon(c, d, h, g, config, color));
+        polygons.add(new MyPolygon(a, d, h, e, config, color));
+        polygons.add(new MyPolygon(e, f, g, h, config, color));
         
         return polygons;
     }
     
     
-        public void wypisz(Block block){
+    public void wypisz(Block block){
 //        System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTT");
 //           System.out.println(block.a.x + ", " + block.a.y + ", " + block.a.z);
 //           System.out.println(block.bb.x + ", " + block.bb.y + ", " + block.bb.z);
@@ -339,6 +353,10 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
 //           System.out.println(block.g.x + ", " + block.g.y + ", " + block.g.z);
 //           System.out.println(block.h.x + ", " + block.h.y + ", " + block.h.z);
 //           System.out.println("======================");
+    }
+    
+    public boolean checkValues(double d1, double d2, double d3, double d4){
+        return (d1 > 0 && d2 > 0 && d3 > 0 && d4 > 0) || (d1 < 0 && d2 < 0 && d3 < 0 && d4 < 0);
     }
 }
 
@@ -360,3 +378,15 @@ public class MyFrame extends JFrame implements  KeyListener, ActionListener{
 //        
 //        return dl;
 //    }
+
+
+//                    for(int j = 0; j < 4; j++){
+//                        //liczę odległość punktów od płaszczyzny
+//                        double point_distance = (A * checked.getPoint(j).x + B * checked.getPoint(j).y + C * checked.getPoint(j).z + D ) / (Math.sqrt(A * A + B * B + C * C));
+//                        double observer_distance = ( D ) / (Math.sqrt(A * A + B * B + C * C));//obserwator w pkt (0,0,0)
+//
+//                        if(point_distance * observer_distance > 0){ 
+//                            temp.covers++;//punkty po tej samej stronie
+//                            break;
+//                        }
+//                    }

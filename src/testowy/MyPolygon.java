@@ -5,6 +5,7 @@
  */
 package testowy;
 
+import java.awt.Color;
 import structures.Point3D;
 
 /**
@@ -16,14 +17,16 @@ public class MyPolygon implements Comparable{
     public int covers;
     Configurator c;
     public double distance = 0;
+    public Color color;
     
-    public MyPolygon(Point3D p1, Point3D p2, Point3D p3, Point3D p4, Configurator c){
+    public MyPolygon(Point3D p1, Point3D p2, Point3D p3, Point3D p4, Configurator c, Color color){
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
         this.p4 = p4;
         this.covers = 0;
         this.c = c;
+        this.color = color;
     }
     
     @Override

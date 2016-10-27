@@ -5,6 +5,8 @@
  */
 package testowy;
 
+import java.awt.Color;
+
 /**
  *
  * @author grycz
@@ -12,6 +14,7 @@ package testowy;
 public class PolygonsContainer {
     public int xpts[] = new int[4];
     public int ypts[] = new int[4];
+    public Color color;
     
     public PolygonsContainer(){}
 }
